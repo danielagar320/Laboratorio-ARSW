@@ -11,7 +11,7 @@ import java.util.Arrays;
  *
  * @author hcadavid
  */
-public class Main {
+public class Main{
 
     public static void main(String a[]) {
         System.out.println(bytesToHex(PiDigits.getDigits(0, 10)));
