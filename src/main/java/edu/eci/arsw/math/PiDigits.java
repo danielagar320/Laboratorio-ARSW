@@ -1,5 +1,9 @@
 package edu.eci.arsw.math;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
+
 ///  <summary>
 ///  An implementation of the Bailey-Borwein-Plouffe formula for calculating hexadecimal
 ///  digits of pi.
@@ -20,34 +24,41 @@ public class PiDigits {
      * @param count The number of digits to return
      * @return An array containing the hexadecimal digits.
      */
-    public static byte[] getDigits(int start, int count, int N) {
-        if (start < 0) {
-            throw new RuntimeException("Invalid Interval");
-        }
+    public static byte[] getDigits(int start, int count, int N) throws InterruptedException, IOException {
+        int individuales = count/N;
+        System.out.println("Cantidad Individual"+individuales);
+        int pendiente = count - (individuales*N);
+        System.out.println("Cantidad Pendiente"+pendiente);
+        ArrayList<DigitsThread> hilos = new ArrayList<>();
+        System.out.println("Arreglo de hilos"+hilos);
 
-        if (count < 0) {
-            throw new RuntimeException("Invalid Interval");
-        }
-
-        byte[] digits = new byte[count];
-        double sum = 0;
-
-        for (int i = 0; i < count; i++) {
-            if (i % DigitsPerSum == 0) {
-                sum = 4 * sum(1, start)
-                        - 2 * sum(4, start)
-                        - sum(5, start)
-                        - sum(6, start);
-
-                start += DigitsPerSum;
+        for(int i=0; i<N; i++){
+            if(i==0 && pendiente!=0){
+                hilos.add(new DigitsThread(start, individuales+pendiente));
+                start = start + individuales+pendiente;
             }
-
-            sum = 16 * (sum - Math.floor(sum));
-            digits[i] = (byte) sum;
+            else{
+                hilos.add(new DigitsThread(start,individuales));
+                start = start + individuales;
+            }
         }
 
-        return digits;
+        //Iniciar Hilos
+        for(int i=0; i<hilos.size(); i++){
+            hilos.get(i).start();
+        }
+        //Esperar a que todos terminen
+        for(int i=0; i<hilos.size(); i++){
+            hilos.get(i).join();
+        }
+        //Generar el numero
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
+        for(int i=0; i<hilos.size(); i++){
+            outputStream.write(hilos.get(i).traerResultado());
+        }
+        return outputStream.toByteArray( );
     }
+
 
 
     public static byte[] getDigits(int start, int count) {

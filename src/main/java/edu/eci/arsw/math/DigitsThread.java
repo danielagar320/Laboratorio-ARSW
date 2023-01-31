@@ -2,27 +2,26 @@ package edu.eci.arsw.math;
 
 public class DigitsThread extends Thread {
 
-    private byte[] digitosGlobales;
+    private byte[] piDigits;
     private int start;
     private int count;
-    private int N;
 
-    public DigitsThread(int start, int count, int N){
-        this.N = N;
+    public DigitsThread(int start, int count){
         this.start = start;
         this.count = count;
     }
 
-    @Override
-    public void run(){
-        byte[] pDigits = PiDigits.getDigits(start, count);
-        for(int i= start,  j = 0; i <start+count; i++, j++){
-            pDigits = digitosGlobales[i-start]
-        }
 
+    public void run(){
+        piDigits = PiDigits.getDigits(start, count);
 
     }
 
+    public byte[] traerResultado(){
+        return piDigits;
+    }
 
 
 }
+
+
