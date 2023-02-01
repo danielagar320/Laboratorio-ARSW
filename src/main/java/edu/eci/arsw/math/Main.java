@@ -15,8 +15,8 @@ import java.util.Arrays;
 public class Main{
 
     public static void main(String a[]) throws IOException, InterruptedException {
-        System.out.println(bytesToHex(PiDigits.getDigits(0, 10, 2)));
-        System.out.println(bytesToHex(PiDigits.getDigits(1, 100, 2)));
+        System.out.println(bytesToHex(PiDigits.getDigits(0, 10, 1)));
+        System.out.println(bytesToHex(PiDigits.getDigits(1, 100, 1)));
         //System.out.println(bytesToHex(PiDigits.getDigits(1, 1000000, 1)));
     }
 

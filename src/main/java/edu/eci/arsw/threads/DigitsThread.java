@@ -1,4 +1,6 @@
-package edu.eci.arsw.math;
+package edu.eci.arsw.threads;
+
+import edu.eci.arsw.math.PiDigits;
 
 public class DigitsThread extends Thread {
 
@@ -9,9 +11,10 @@ public class DigitsThread extends Thread {
     public DigitsThread(int start, int count){
         this.start = start;
         this.count = count;
+        this.piDigits = null;
     }
 
-
+    @Override
     public void run(){
         piDigits = PiDigits.getDigits(start, count);
 

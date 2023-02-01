@@ -1,8 +1,8 @@
 package edu.eci.arsw.math;
 
+import edu.eci.arsw.threads.DigitsThread;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.io.ByteArrayOutputStream;
 
 ///  <summary>
 ///  An implementation of the Bailey-Borwein-Plouffe formula for calculating hexadecimal
@@ -26,37 +26,37 @@ public class PiDigits {
      */
     public static byte[] getDigits(int start, int count, int N) throws InterruptedException, IOException {
         int individuales = count/N;
-        System.out.println("Cantidad Individual"+individuales);
-        int pendiente = count - (individuales*N);
-        System.out.println("Cantidad Pendiente"+pendiente);
+        int modulo = count % N;
+        byte[] digits = new byte[count];
+
         ArrayList<DigitsThread> hilos = new ArrayList<>();
-        System.out.println("Arreglo de hilos"+hilos);
+        int acum = 0;
+
 
         for(int i=0; i<N; i++){
-            if(i==0 && pendiente!=0){
-                hilos.add(new DigitsThread(start, individuales+pendiente));
-                start = start + individuales+pendiente;
+            DigitsThread hilo = null;
+            if(modulo > 0){
+                hilo = new DigitsThread(start + i * individuales + acum, individuales + 1);
+                modulo -=1;
+                acum +=1;
+            } else{
+                hilo = new DigitsThread(start + i * individuales + acum, individuales);
             }
-            else{
-                hilos.add(new DigitsThread(start,individuales));
-                start = start + individuales;
-            }
+            hilos.add(hilo);
+            hilo.start();
+
         }
 
-        //Iniciar Hilos
-        for(int i=0; i<hilos.size(); i++){
-            hilos.get(i).start();
-        }
-        //Esperar a que todos terminen
-        for(int i=0; i<hilos.size(); i++){
-            hilos.get(i).join();
-        }
-        //Generar el numero
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
-        for(int i=0; i<hilos.size(); i++){
-            outputStream.write(hilos.get(i).traerResultado());
-        }
-        return outputStream.toByteArray( );
+		int var = 0;
+		for (DigitsThread x : hilos) {
+			x.join();
+			for (byte b : x.traerResultado()) {
+				digits[var] = b;
+				var++;
+			}
+		}
+
+		return digits;
     }
 
 
