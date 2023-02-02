@@ -15,9 +15,22 @@ import java.util.Arrays;
 public class Main{
 
     public static void main(String a[]) throws IOException, InterruptedException {
-        System.out.println(bytesToHex(PiDigits.getDigits(0, 10, 1)));
-        System.out.println(bytesToHex(PiDigits.getDigits(1, 100, 1)));
-        //System.out.println(bytesToHex(PiDigits.getDigits(1, 1000000, 1)));
+        //System.out.println(bytesToHex(PiDigits.getDigits(0, 10, 3)));
+        //System.out.println(bytesToHex(PiDigits.getDigits(1, 100, 1)));
+        //System.out.println(bytesToHex(PiDigits.getDigits(1, 100, 2)));
+        //System.out.println(bytesToHex(PiDigits.getDigits(1, 100, 3)));
+        //Cantidad de nucleos
+        int nucleos = Runtime.getRuntime().availableProcessors();
+        //Con un hilo
+        //System.out.println(bytesToHex(PiDigits.getDigits(1, 100000, 1)));
+        //Con tantos hilos como nucleos
+        //System.out.println(bytesToHex(PiDigits.getDigits(1, 100, nucleos)));
+        //Con tantos hilos como el doble de nucleos
+        //System.out.println(bytesToHex(PiDigits.getDigits(1, 100, 2*nucleos)));
+        //Con 200 hilos 
+        //System.out.println(bytesToHex(PiDigits.getDigits(1, 100, 200)));
+        //Con 500 hilos
+        System.out.println(bytesToHex(PiDigits.getDigits(1, 100000, 500)));
     }
 
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
